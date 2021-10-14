@@ -20,12 +20,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      env:
-        MY_FOO: foo
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
     - run: node -v
     - run: node demo.js
     - name: test my env
+      env:
+        MY_FOO: foo
       run: echo "my foo is <$MY_FOO>"
