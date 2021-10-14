@@ -27,3 +27,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: node -v
     - run: node demo.js
+    - name: test my env
+      run: echo "my foo is <$MY_FOO>"
