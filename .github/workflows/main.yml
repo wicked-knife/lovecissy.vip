@@ -4,6 +4,7 @@ name: CI
 
 env:
   NODE_VERSION: '14.x'                # set this to the node version to use
+  DOCKER_REMOTE: ccr.ccs.tencentyun.com
 
 # Controls when the workflow will run
 on:
@@ -37,8 +38,12 @@ jobs:
           npm run build
 
       - name: build docker image
+        env: 
+          IMAGE_NAME: ${{ env.DOCKER_REMOTE }}/geraltfeng/web:$(date +%s)
         run: |
           docker -v
           ls
-          docker build -f dockerfile -t lovecissy.vip/nginx:$(date +%s) .
-          docker images
+          docker build -f dockerfile -t ${{ env.IMAGE_NAME }} .
+          docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ env.IMAGE_NAME }}
+          docker logout
