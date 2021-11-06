@@ -39,6 +39,7 @@ jobs:
         run: |
           npm install
           npm run build
+          echo ${{ env.TIMESTAMP }}
 
       - name: build docker image
         run: |
