@@ -5,6 +5,7 @@ name: CI
 env:
   NODE_VERSION: '14.x'                # set this to the node version to use
   DOCKER_REMOTE: ccr.ccs.tencentyun.com
+  IMAGE_NAME: ${{ env.DOCKER_REMOTE }}/geraltfeng/web:$(date +%s)
 
 # Controls when the workflow will run
 on:
@@ -21,8 +22,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    env: 
-      IMAGE_NAME: ${{ env.DOCKER_REMOTE }}/geraltfeng/web:$(date +%s)
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
