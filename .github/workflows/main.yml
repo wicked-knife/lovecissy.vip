@@ -26,7 +26,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: setup env
-        run: echo TIMESTAMP=$(date +%Y%m%d%H%M%S) >> $GITHUB_ENV
+        run: |
+          echo TIMESTAMP=$(date +%Y%m%d-%H%M%S) >> $GITHUB_ENV
+          echo IMAGE_NAME=${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}-${{ env.TIMESTAMP }} >> $GITHUB_ENV
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
@@ -44,13 +46,13 @@ jobs:
       - name: build docker image
         run: |
           docker -v
-          docker build -f dockerfile -t ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}${{ env.TIMESTAMP }} .
-          echo ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}${{ env.TIMESTAMP }}
+          docker build -f dockerfile -t ${{ IMAGE_NAME }} .
+          echo ${{ IMAGE_NAME }}
 
       - name: docker login and push image
         run: |
           docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}${{ env.TIMESTAMP }}
+          docker push ${{ IMAGE_NAME }}
           docker logout
 
       - name: SSH Remote Commands
@@ -61,5 +63,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}${{ env.TIMESTAMP }}
-          
+            docker pull ${{ IMAGE_NAME }}
+            docker rm -f $( docker ps -aq)
+            docker rmi -f $( docker images -f "before=${{ IMAGE_NAME }}" -aq )
+            docker run -d -p 80:80 ${{ IMAGE_NAME }}
