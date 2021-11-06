@@ -56,5 +56,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
-          script: whoami
+          script: |
+            docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}
           
