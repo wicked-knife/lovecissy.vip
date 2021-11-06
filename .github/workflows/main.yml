@@ -26,9 +26,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: setup env
-        run: |
-          echo TIMESTAMP=$(date +%Y%m%d-%H%M%S) >> $GITHUB_ENV
-          echo IMAGE_NAME=${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}-${{ env.TIMESTAMP }} >> $GITHUB_ENV
+        run: echo IMAGE_NAME=${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}-$(date +%Y%m%d-%H%M%S) >> $GITHUB_ENV
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
