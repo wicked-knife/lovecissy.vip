@@ -46,13 +46,13 @@ jobs:
       - name: build docker image
         run: |
           docker -v
-          docker build -f dockerfile -t ${{ IMAGE_NAME }} .
-          echo ${{ IMAGE_NAME }}
+          docker build -f dockerfile -t ${{ env.IMAGE_NAME }} .
+          echo ${{ env.IMAGE_NAME }}
 
       - name: docker login and push image
         run: |
           docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ IMAGE_NAME }}
+          docker push ${{ env.IMAGE_NAME }}
           docker logout
 
       - name: SSH Remote Commands
@@ -63,7 +63,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ IMAGE_NAME }}
+            docker pull ${{ env.IMAGE_NAME }}
             docker rm -f $( docker ps -aq)
-            docker rmi -f $( docker images -f "before=${{ IMAGE_NAME }}" -aq )
-            docker run -d -p 80:80 ${{ IMAGE_NAME }}
+            docker rmi -f $( docker images -f "before=${{ env.IMAGE_NAME }}" -aq )
+            docker run -d -p 80:80 ${{ env.IMAGE_NAME }}
