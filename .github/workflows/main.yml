@@ -5,7 +5,7 @@ name: CI
 env:
   NODE_VERSION: '14.x'                # set this to the node version to use
   DOCKER_REMOTE: ccr.ccs.tencentyun.com
-  IMAGE_NAME: ${{ env.DOCKER_REMOTE }}/geraltfeng/web:$(date +%s)
+  IMAGE_NAME: ccr.ccs.tencentyun.com/geraltfeng/web:$(date +%s)
 
 # Controls when the workflow will run
 on:
