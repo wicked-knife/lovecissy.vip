@@ -39,5 +39,5 @@ jobs:
       - name: build docker image
         run: |
           docker -v
-          docker build -f dockerfile -t lovecissy.vip/nginx:date +%s
+          docker build -f dockerfile -t lovecissy.vip/nginx:$(date +%s) .
           docker images
