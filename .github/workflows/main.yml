@@ -5,7 +5,7 @@ name: CI
 env:
   NODE_VERSION: '14.x'                # set this to the node version to use
   DOCKER_REMOTE: ccr.ccs.tencentyun.com
-  IMAGE_NAME: ccr.ccs.tencentyun.com/geraltfeng/web:$(date +%s)
+  DOCKER_PATH: /geraltfeng/web:${{ github.sha }}
 
 # Controls when the workflow will run
 on:
@@ -41,10 +41,11 @@ jobs:
       - name: build docker image
         run: |
           docker -v
-          docker build -f dockerfile -t ${{ env.IMAGE_NAME }} .
-          echo ${{env.IMAGE_NAME}}
-      - name: docker login
+          docker build -f dockerfile -t ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }} .
+          echo ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}
+
+      - name: docker login and push image
         run: |
           docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ env.IMAGE_NAME }}
+          docker push ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}
           docker logout
