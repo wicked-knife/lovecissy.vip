@@ -49,3 +49,12 @@ jobs:
           docker login ${{ env.DOCKER_REMOTE }} -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker push ${{ env.DOCKER_REMOTE }}${{ env.DOCKER_PATH }}
           docker logout
+
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.4
+        with: 
+          host: {{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: whoami
+          
