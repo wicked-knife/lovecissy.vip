@@ -1,5 +1,5 @@
-FROM ccr.ccs.tencentyun.com/library/nginx
+FROM openresty/openresty
 
-COPY nginx.conf /etc/nginx/
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY dist/* /var/www/lovecissy.vip/public/
+COPY dist/* /usr/local/openresty/nginx/html
