@@ -3,7 +3,7 @@
 name: CI
 
 env:
-  NODE_VERSION: '14.x'                # set this to the node version to use
+  NODE_VERSION: '16.x'                # set this to the node version to use
   DOCKER_REMOTE: ccr.ccs.tencentyun.com
   DOCKER_PATH: /geraltfeng/web:${{ github.sha }}
 
